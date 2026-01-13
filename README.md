@@ -142,7 +142,6 @@ heatmaps
 
 Το pipeline υπογραμμίζει ότι συνδυαστικά pipelines επιλογής χαρακτηριστικών με ισχυρούς ensemble ή gradient boosting ταξινομητές προσφέρουν αξιόπιστη ταξινόμηση NSCLC, ανοίγοντας τον δρόμο για κλινική ενσωμάτωση σε συστήματα υποστήριξης αποφάσεων.
 
-Project Structure
 nsclc-classification-pipeline/
 │
 ├── src/
@@ -163,5 +162,6 @@ nsclc-classification-pipeline/
 │   └── explainability/
 │
 └── main.py
+
 
 
