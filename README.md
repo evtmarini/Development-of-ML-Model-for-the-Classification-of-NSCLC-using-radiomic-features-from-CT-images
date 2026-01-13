@@ -1,4 +1,3 @@
-Τέλεια! Μπορούμε να κρατήσουμε **ακριβώς το ίδιο format**, αλλά να το εμπλουτίσουμε με όλα τα στοιχεία που μου έδωσες για **NSCLC + SCLC, ComBat harmonization, outer/inner CV, hold-out evaluation και τα κορυφαία μοντέλα**. Παρακάτω είναι το πλήρες README σε αυτό το format:
 
 ---
 
