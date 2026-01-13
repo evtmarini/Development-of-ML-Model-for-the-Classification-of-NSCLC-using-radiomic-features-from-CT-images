@@ -1,167 +1,180 @@
-# Development-of-ML-Model-for-the-Classification-of-NSCLC-using-radiomic-features-from-CT-images
-Development of ML Model for the Classification of NSCLC using radiomic features from CT images
+Τέλεια! Μπορούμε να κρατήσουμε **ακριβώς το ίδιο format**, αλλά να το εμπλουτίσουμε με όλα τα στοιχεία που μου έδωσες για **NSCLC + SCLC, ComBat harmonization, outer/inner CV, hold-out evaluation και τα κορυφαία μοντέλα**. Παρακάτω είναι το πλήρες README σε αυτό το format:
 
+---
 
-Project Overview
+# NSCLC Classification Pipeline
 
-Αυτό το repository περιέχει τον πλήρη κώδικα για το machine learning pipeline που αναπτύχθηκε:
+Development of ML model for non-small cell lung cancer detection
 
-«Development of ML model for non-small cell lung cancer classification»
+# SYNOPSIS
 
+Αυτό το repository περιέχει τον πλήρη κώδικα για την ανάπτυξη ενός **Machine Learning pipeline** που ταξινομεί φαινοτύπους **NSCLC και SCLC** από CT εικόνες, χρησιμοποιώντας **ραδιομικά χαρακτηριστικά** εξαγόμενα από αξονικές τομογραφίες (CT).
 
-Στην παρούσα μελέτη αναπτύχθηκε ένα ολοκληρωμένο pipeline μηχανικής μάθησης για την ταξινόμηση φαινοτύπων NSCLC και SCLC από CT εικόνες, χρησιμοποιώντας ραδιομικά χαρακτηριστικά.
+Το έργο αποτελεί μέρος της διπλωματικής εργασίας:
+*"Development of ML model for non-small cell lung cancer detection"*
 
-Στόχος του έργου είναι η βελτιστοποίηση της απόδοσης και η εξασφάλιση γενικευσιμότητας σε πολυκεντρικά δεδομένα υψηλής διάστασης, μέσω:
+Το pipeline περιλαμβάνει:
 
-Προεπεξεργασίας
+* Προεπεξεργασία δεδομένων και normalization
+* **ComBat harmonization** για πολυκεντρικά δεδομένα
+* Επιλογή χαρακτηριστικών μέσω πολλαπλών μεθόδων
+* Εκπαίδευση ισχυρών ταξινομητών (LightGBM, XGBoost, Soft Voting Ensemble)
+* Ανάλυση ερμηνευσιμότητας με **SHAP** και **LIME**
 
-ComBat harmonization
+Στόχος είναι η **βελτιστοποίηση της απόδοσης** και η **εξασφάλιση γενικευσιμότητας**.
 
-Κανονικοποίησης
+---
 
-Επιλογής χαρακτηριστικών μέσω πολυάριθμων μεθόδων
+# Εισαγωγή
 
-Εκπαίδευσης ισχυρών ταξινομητών
+Ο καρκίνος του πνεύμονα είναι η κύρια αιτία θανάτων από καρκίνο παγκοσμίως (~19% το 2022).
+Το NSCLC (Non-Small Cell Lung Cancer) αντιπροσωπεύει περίπου το 85% των περιπτώσεων και περιλαμβάνει:
 
-Ανάλυσης ερμηνευσιμότητας με SHAP και LIME
+* Αδενοκαρκίνωμα (Adenocarcinoma)
+* Πλακώδες καρκίνωμα (Squamous Cell Carcinoma)
+* Μεγαλοκυτταρικό καρκίνωμα (Large-Cell Carcinoma)
 
-Το pipeline και ο κώδικας είναι διαθέσιμα για περαιτέρω έρευνα και ανάπτυξη μέσω του GitHub repository.
-
-Εισαγωγή
-
-Ο καρκίνος του πνεύμονα αποτελεί την κυριότερη αιτία θανάτου από καρκίνο παγκοσμίως, με το NSCLC να αντιστοιχεί περίπου στο 85% των περιπτώσεων.
-
-Οι βασικοί υποτύποι NSCLC περιλαμβάνουν:
-
-Αδενοκαρκίνωμα
-
-Πλακώδες καρκίνωμα
-
-Μεγαλοκυτταρικό καρκίνωμα
+Το SCLC (Small Cell Lung Cancer) είναι πιο επιθετικό και αντιπροσωπεύει ~15% των περιπτώσεων.
 
 Η ακριβής διάκριση των υποτύπων είναι κρίσιμη για:
 
-επιλογή θεραπευτικής στρατηγικής
+* Στοχευμένη θεραπεία
+* Πρόγνωση ασθενούς
+* Εξατομικευμένη ιατρική
 
-πρόγνωση ασθενούς
+Η **Ραδιομική (Radiomics)** παρέχει μια **μη επεμβατική** προσέγγιση, εξάγοντας ποσοτικά χαρακτηριστικά από ιατρικές εικόνες και επιτρέποντας την ανάπτυξη αξιόπιστων μοντέλων πρόβλεψης.
 
-εξατομικευμένη ιατρική
+---
 
-Η ραδιομική προσφέρει μια μη επεμβατική προσέγγιση, εξάγοντας ποσοτικά χαρακτηριστικά από ιατρικές εικόνες, τα οποία μπορούν να αξιοποιηθούν από αλγορίθμους μηχανικής μάθησης.
+## Δομή Αρχείων
 
-Pipeline Architecture
-
-Το pipeline έχει σχεδιαστεί σύμφωνα με best practices για radiomics και medical ML, με αυστηρό διαχωρισμό δεδομένων και nested cross-validation.
-
-Στάδιο	Module	Περιγραφή
-1. Data Loading	src/load_data.py	Φόρτωση ραδιομικών δεδομένων, καθαρισμός, encoding labels & centers
-2. Data Splitting	src/split_and_check.py	Center- & label-aware splitting, δημιουργία ισορροπημένων outer CV folds
-3. Harmonization	—	ComBat harmonization για διόρθωση batch / center effects
-4. Preprocessing	src/preprocessing.py	Φιλτράρισμα χαμηλής διακύμανσης, συσχέτισης και στατιστικής σημαντικότητας
-5. Feature Selection	src/feature_selection.py	LASSO, RF importance, Boruta, RFE-SVM, mRMR, ReliefF
-6. Modeling	src/models.py	Εκπαίδευση και παραμετροποίηση ML classifiers (LightGBM, Soft Voting Ensemble, Logistic Regression, SVM)
-7. Evaluation	src/evaluation.py	Nested CV, F1-score, Accuracy, ROC-AUC
-8. Explainability	src/explainability.py	Ανάλυση ερμηνευσιμότητας στο hold-out set (SHAP, LIME)
-Feature Selection Strategy
-
-Εφαρμόζονται πολλαπλές μέθοδοι feature selection ώστε να μελετηθεί η επίδρασή τους στην απόδοση των μοντέλων:
-
-LASSO
-
-Random Forest feature importance
-
-Boruta
-
-Recursive Feature Elimination (SVM-based)
-
-mRMR
-
-ReliefF
-
-Για κάθε μέθοδο:
-
-αξιολογούνται διαφορετικά μεγέθη υποσυνόλων χαρακτηριστικών (top-k)
-
-η επιλογή γίνεται εντός nested cross-validation
-
-αποφεύγεται information leakage
-
-Σημαντικά χαρακτηριστικά που ξεχώρισαν:
-
-wavelet-transformed 3D texture features
-
-log-sigma 3D texture features
-
-first-order και shape features
-
-Evaluation Strategy
-
-Η αξιολόγηση ακολουθεί τα εξής cross validations:
-
-Outer Cross-Validation – Αμερόληπτη εκτίμηση γενίκευσης
-
-Κορυφαίο μοντέλο: RFE_SVM + LightGBM με 50 χαρακτηριστικά
-
-F1 = 0.746, AUC = 0.845
-
-Άλλα ισχυρά μοντέλα: RFE_SVM + Soft Voting Ensemble, mRMR + Soft Voting Ensemble
-
-Inner Cross-Validation – Βελτιστοποίηση feature selection & hyperparameters
-
-Independent Hold-Out Set (10%) – Τελική αξιολόγηση
-
-F1 = 0.684, Accuracy = 0.717, AUC = 0.772
-
-Ερμηνευσιμότητα: SHAP και LIME αποκάλυψαν τα κρίσιμα χαρακτηριστικά που καθορίζουν τις προβλέψεις, υποστηρίζοντας την κλινική ερμηνεία.
-
-Outputs & Results
-
-Όλα τα αποτελέσματα αποθηκεύονται αυτόματα στον φάκελο results/:
-
-inner_cv_results.csv
-
-outer_cv_results.csv
-
-selected_features.csv
-
-top3_models.csv
-
-top3_features_classes.csv
-
-holdout_results.csv
-
-Παράγονται επίσης:
-
-bar plots
-
-boxplots
-
-heatmaps
-
-κατανομή feature classes
-
-Το pipeline υπογραμμίζει ότι συνδυαστικά pipelines επιλογής χαρακτηριστικών με ισχυρούς ensemble ή gradient boosting ταξινομητές προσφέρουν αξιόπιστη ταξινόμηση NSCLC, ανοίγοντας τον δρόμο για κλινική ενσωμάτωση σε συστήματα υποστήριξης αποφάσεων.
-
-nsclc-classification-pipeline/
+```
+NSCLC Classification/
+│
+├── main.py
+│
+├── data/
+│   ├── Radiomic_Features_All.xlsx
+│   └── labeled_radiomics_features.csv
 │
 ├── src/
 │   ├── load_data.py
-│   ├── split_and_check.py
 │   ├── preprocessing.py
+│   ├── split_and_check.py
 │   ├── feature_selection.py
 │   ├── models.py
 │   ├── evaluation.py
-│   └── explainability.py
-│
-├── data/
-│   └── Radiomic_Features_All.xlsx
+│   ├── visualization.py
+│   ├── explainability.py
+│   └── __init__.py
 │
 ├── results/
-│   ├── *.csv
-│   ├── *.png
+│   ├── inner_cv_results.csv
+│   ├── outer_cv_results.csv
+│   ├── selected_features.csv
+│   ├── top3_models.csv
+│   ├── top3_features_classes.csv
+│   ├── holdout_results.csv
 │   └── explainability/
-│
-└── main.py
+│       ├── shap_bar_plot.png
+│       ├── shap_summary_plot.png
+│       └── lime_example.html
+```
 
+---
 
+## Περιγραφή Pipeline
 
+Το pipeline αποτελείται από τα εξής στάδια:
+
+| Στάδιο                     | Module                     | Περιγραφή                                                                                                 |
+| -------------------------- | -------------------------- | --------------------------------------------------------------------------------------------------------- |
+| 1. Φόρτωση δεδομένων       | `src/load_data.py`         | Ανάγνωση αρχείων Excel/CSV, έλεγχος δεδομένων, encoding labels και center, διαχείριση ελλειπών τιμών      |
+| 2. Διαχωρισμός             | `src/split_and_check.py`   | Center- & label-aware splitting, ισορροπημένα outer CV folds, έλεγχος ετερογένειας                        |
+| 3. Harmonization           | —                          | **ComBat harmonization** για διόρθωση batch / center effects                                              |
+| 4. Προεπεξεργασία          | `src/preprocessing.py`     | Κανονικοποίηση, φιλτράρισμα χαμηλής διακύμανσης, αφαίρεση συσχετισμένων χαρακτηριστικών, στατιστικά tests |
+| 5. Επιλογή χαρακτηριστικών | `src/feature_selection.py` | LASSO, RF importance, Boruta, RFE-SVM, mRMR, ReliefF                                                      |
+| 6. Εκπαίδευση μοντέλων     | `src/models.py`            | LightGBM, XGBoost, Random Forest, Soft Voting Ensemble, Logistic Regression, SVM                          |
+| 7. Αξιολόγηση              | `src/evaluation.py`        | **Nested Cross-Validation**, Outer CV, Inner CV, hold-out evaluation, F1-score, Accuracy, ROC-AUC         |
+| 8. Ερμηνευσιμότητα         | `src/explainability.py`    | **SHAP & LIME**, ανάλυση κρίσιμων χαρακτηριστικών για τις προβλέψεις                                      |
+
+---
+
+# Δεδομένα
+
+Τα δεδομένα περιλαμβάνονται στον φάκελο `data/`:
+
+* **Radiomic features** εξαγόμενα από CT εικόνες μέσω PyRadiomics
+* **labeled_radiomics_features.csv**: χαρακτηριστικά με ετικέτες υποτύπων
+* **Radiomic_Features_All.xlsx**: αναφορά χαρακτηριστικών με metadata
+
+---
+
+## Evaluation Strategy
+
+Η αξιολόγηση του μοντέλου βασίστηκε σε μια **συστηματική διαδικασία cross-validation** για εξασφάλιση γενικευσιμότητας και αποφυγή overfitting.
+
+### 1. Inner Cross-Validation (Inner CV)
+
+* 3-fold stratified splits εντός κάθε outer fold
+* Επιλογή βέλτιστων hyperparameters και top-k χαρακτηριστικών (10-100)
+* Μέθοδοι επιλογής χαρακτηριστικών: LASSO, RF_importance, Boruta, RFE_SVM, mRMR, ReliefF
+* Αποτελέσματα καταγράφηκαν στο `inner_cv_results.csv`
+
+### 2. Outer Cross-Validation (Outer CV)
+
+* 3 εξωτερικά folds, ισορροπημένα σε κλάσεις και centers
+* Εκπαίδευση μοντέλων με χαρακτηριστικά από inner CV
+* Αξιολόγηση LightGBM, XGBoost, Soft Voting Ensemble
+* Αποτελέσματα αποθηκεύτηκαν στο `outer_cv_results.csv`
+* Επιλεγμένα χαρακτηριστικά στο `selected_features.csv`
+
+### 3. Hold-Out Set
+
+* 10% του dataset, ανεξάρτητο από οποιαδήποτε διαδικασία εκπαίδευσης
+* Τελική εκτίμηση γενικευσιμότητας
+* Αποτελέσματα στο `holdout_results.csv`
+
+---
+
+## Κορυφαία Μοντέλα & Αποτελέσματα
+
+| Feature Selection | Classifier           | Top-k | Outer F1 | Outer AUC |
+| ----------------- | -------------------- | ----- | -------- | --------- |
+| RFE_SVM           | LightGBM             | 50    | 0.746    | 0.845     |
+| RFE_SVM           | Soft Voting Ensemble | 50    | 0.732    | 0.827     |
+| mRMR              | Soft Voting Ensemble | 60    | 0.729    | 0.821     |
+
+**Hold-out set (10%)**:
+F1 = 0.684, Accuracy = 0.717, AUC = 0.772
+
+---
+
+## Ερμηνευσιμότητα
+
+Η ανάλυση **SHAP/LIME** στο hold-out set αποκάλυψε τα πιο κρίσιμα χαρακτηριστικά για διάκριση NSCLC φαινοτύπων:
+
+* wavelet-transformed texture features
+* log-sigma 3D texture features
+* first-order features
+* shape features
+
+Αυτό υποστηρίζει την κλινική ερμηνεία των μοντέλων.
+
+---
+
+## Συμπεράσματα
+
+Το pipeline επιβεβαιώνει ότι ένα **σωστά σχεδιασμένο ML workflow**, με:
+
+* Σωστή επιλογή χαρακτηριστικών
+* Ισχυρούς ταξινομητές (ensemble/gradient boosting)
+* Αυστηρή cross-validation
+
+μπορεί να προσφέρει **αξιόπιστη διάκριση φαινοτύπων NSCLC/SCLC**, ανοίγοντας τον δρόμο για **ενσωμάτωση σε κλινικά συστήματα υποστήριξης αποφάσεων**.
+
+---
+
+Αν θέλεις, μπορώ να φτιάξω και μια **γραφική έκδοση README** με **διαγράμματα pipeline και top-3 μοντέλα**, ώστε να είναι **εντυπωσιακό για GitHub**.
+
+Θέλεις να το κάνω;
