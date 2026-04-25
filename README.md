@@ -47,3 +47,168 @@ Radiomics provides a non-invasive approach by extracting quantitative features f
 ---
 
 ## Project Structure
+
+
+
+
+
+
+
+---
+
+## Pipeline
+
+The pipeline consists of the following stages:
+
+1. Data Loading and Cleaning  
+2. Train/Test Splitting (center-aware)  
+3. ComBat Harmonization  
+4. Preprocessing and Normalization  
+5. Feature Selection  
+   - LASSO  
+   - Boruta  
+   - mRMR  
+   - RFE-SVM  
+   - ReliefF  
+6. Model Training  
+   - LightGBM  
+   - XGBoost  
+   - Random Forest  
+   - SVM  
+   - Ensemble methods  
+7. Evaluation  
+   - Nested Cross-Validation  
+   - Hold-out testing  
+8. Explainability  
+   - SHAP  
+   - LIME  
+
+---
+
+## Evaluation Strategy
+
+- Nested Cross-Validation  
+  - Inner CV for hyperparameter tuning and feature selection  
+  - Outer CV for unbiased performance estimation  
+
+- Hold-out dataset (10%)  
+  - Final generalization evaluation  
+
+---
+
+## Results
+
+### Inner Cross-Validation
+
+Top-performing configurations:
+
+- Soft Voting + ReliefF (Top-k = 90) → wF1 = 0.83 ± 0.02  
+- XGBoost + RFE-SVM (Top-k = 90) → wF1 = 0.83 ± 0.01  
+- Soft Voting + RF importance (Top-k = 90) → wF1 = 0.83 ± 0.01  
+
+Performance differences were minimal, indicating robust and consistent model behavior.
+
+Lowest performance:
+- Logistic Regression + mRMR (Top-k = 10)  
+  → wF1 = 0.48 ± 0.02, AUC = 0.56  
+
+---
+
+### Outer Cross-Validation
+
+- Random Forest + ReliefF (Top-k = 50)  
+  → wF1 = 0.80 ± 0.03, AUC = 0.84  
+
+- Stacking Ensemble + RFE-SVM (Top-k = 90)  
+  → wF1 = 0.80, AUC = 0.81  
+
+- Stacking Ensemble + ReliefF (Top-k = 70)  
+  → wF1 = 0.80 ± 0.02, AUC = 0.79  
+
+These results demonstrate stable generalization performance across models and feature subsets.
+
+---
+
+### Hold-out Set
+
+Best-performing configuration:
+
+- ReliefF + Random Forest (Top-k = 50)
+
+Performance:
+
+- wF1-score: 0.814  
+- AUC: 0.854  
+
+This indicates strong predictive performance on unseen data.
+
+---
+
+## Explainability
+
+Model interpretability was assessed using:
+
+- SHAP (global feature importance)  
+- LIME (local explanations)  
+
+Key findings:
+
+- Dominance of wavelet-transformed texture features  
+- Important feature families:
+  - GLCM  
+  - GLRLM  
+  - GLSZM  
+  - GLDM  
+
+Class-specific patterns:
+- ADC: entropy and low-dependence features  
+- SCC: variance and dependence-related features  
+
+Feature importance patterns were consistent across validation and hold-out sets.
+
+---
+
+## Feature Analysis
+
+Analysis of the optimal feature subset (Top-k = 50):
+
+- Dominance of higher-order radiomic features  
+- Main image domains:
+  - Wavelet-transformed images  
+  - Laplacian of Gaussian (LoG)  
+
+Feature distribution:
+- Texture features (GLCM, GLRLM) dominate  
+- GLDM and GLSZM follow  
+- First-order features are limited  
+
+This highlights the importance of multi-scale texture heterogeneity.
+
+---
+
+## Data
+
+- Radiomics features extracted using PyRadiomics  
+- Labeled dataset for subtype classification  
+
+Note: Raw CT images are not included.
+
+---
+
+## How to Run
+pip install -r requirements.txt
+python main.py
+
+
+---
+
+## Author
+
+Evita Marini  
+MSc Bioinformatics and Neuroinformatics  
+
+---
+
+## Citation
+
+If you use this work, please cite the corresponding publication (under submission).
