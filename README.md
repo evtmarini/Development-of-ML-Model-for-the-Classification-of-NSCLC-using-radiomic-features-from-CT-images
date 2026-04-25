@@ -1,7 +1,7 @@
 
 ---
 
-# NSCLC Classification Pipeline
+# Explainable Radiomics-Based ML Model for Lung Cancer Subtype Classification
 
 Development of ML model for non-small cell lung cancer detection
 
