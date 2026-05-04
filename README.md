@@ -48,10 +48,21 @@ Radiomics provides a non-invasive approach by extracting quantitative features f
 
 ## Project Structure
 
-
-
-
-
+| Path | Description |
+|------|------------|
+| `src/load_data.py` | Data loading and preprocessing |
+| `src/split_and_check.py` | Center-aware splitting (CV + hold-out) |
+| `src/feature_selection.py` | Feature selection methods |
+| `src/models.py` | ML models and hyperparameters |
+| `src/evaluation.py` | Nested cross-validation and model evaluation |
+| `src/explainability.py` | SHAP + LIME explainability framework |
+| `scripts/main.py` | Full pipeline execution |
+| `scripts/holdout_pipeline.py` | Final hold-out evaluation + explainability |
+| `scripts/shap_reporting.py` | SHAP reporting (outer + hold-out plots) |
+| `data/` | Input radiomics dataset |
+| `results/` | Output results and figures |
+| `requirements.txt` | Project dependencies |
+| `README.md` | Project documentation |
 
 
 ---
