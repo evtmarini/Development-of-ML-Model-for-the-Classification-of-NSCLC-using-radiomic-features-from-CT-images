@@ -1,11 +1,28 @@
+"""
+Model Definition Module
+
+Defines machine learning models and hyperparameter grids used in the study.
+
+Model categories include:
+- Linear models (Logistic Regression)
+- Kernel-based methods (SVM)
+- Tree-based ensemble models (Random Forest, XGBoost, LightGBM)
+- Ensemble learning methods (Stacking, Voting)
+
+All models are configured with:
+- Class balancing (class_weight="balanced" where applicable)
+- Reproducibility (fixed random_state)
+- Proper preprocessing pipelines (scaling, optional PCA)
+
+Designed for radiomics-based binary classification tasks.
+"""
+
 from sklearn.svm import SVC
 from sklearn.ensemble import (
     RandomForestClassifier, StackingClassifier,
     GradientBoostingClassifier, VotingClassifier
 )
 from sklearn.linear_model import LogisticRegression
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.neural_network import MLPClassifier
 from xgboost import XGBClassifier
 from lightgbm import LGBMClassifier
 from sklearn.pipeline import Pipeline
@@ -15,16 +32,19 @@ from sklearn.decomposition import PCA
 
 def get_models_and_params():
 
-    
-    # Base models
+    # ==========================================================
+    # BASE MODELS
+    # ==========================================================
 
     # Random Forest
+    # Non-linear ensemble model robust to noise and feature interactions
     rf = RandomForestClassifier(
         class_weight="balanced",
         random_state=42
     )
 
-    # SVM (RBF) with PCA
+    # Support Vector Machine (RBF kernel)
+    # Effective in high-dimensional spaces; PCA reduces noise and redundancy
     svm = Pipeline([
         ("scaler", StandardScaler()),
         ("pca", PCA(n_components=0.9, random_state=42)),
@@ -36,7 +56,8 @@ def get_models_and_params():
         ))
     ])
 
-    # Logistic Regression (L2)
+    # Logistic Regression (L2 regularization)
+    # Interpretable baseline linear model
     log_reg = Pipeline([
         ("scaler", StandardScaler()),
         ("clf", LogisticRegression(
@@ -47,40 +68,24 @@ def get_models_and_params():
         ))
     ])
 
-    # k-Nearest Neighbors
-    knn = Pipeline([
-        ("scaler", StandardScaler()),
-        ("clf", KNeighborsClassifier(weights="distance"))
-    ])
-
-    # MLP
-    mlp = Pipeline([
-        ("scaler", StandardScaler()),
-        ("clf", MLPClassifier(
-            hidden_layer_sizes=(128, 64),
-            activation="relu",
-            solver="adam",
-            alpha=0.0005,
-            learning_rate_init=0.001,
-            max_iter=1200,
-            early_stopping=True,
-            n_iter_no_change=20,
-            random_state=42
-        ))
-    ])
+    # ==========================================================
+    # TREE-BASED MODELS
+    # ==========================================================
 
     # XGBoost
+    # Gradient boosting algorithm optimized for structured/tabular data
     xgb = XGBClassifier(
         n_estimators=500,
         learning_rate=0.05,
         max_depth=5,
         subsample=0.8,
         colsample_bytree=0.8,
-        eval_metric="mlogloss",
+        eval_metric="logloss",  # Binary classification metric
         random_state=42
     )
 
     # LightGBM
+    # Efficient gradient boosting with leaf-wise tree growth
     lgbm = LGBMClassifier(
         n_estimators=500,
         learning_rate=0.05,
@@ -89,9 +94,18 @@ def get_models_and_params():
         random_state=42
     )
 
+    # ==========================================================
+    # ENSEMBLE METHODS
+    # ==========================================================
+
     # Stacking Ensemble
+    # Combines heterogeneous base learners to improve generalization
     stacking_model = StackingClassifier(
-        estimators=[("rf", rf), ("svm", svm)],
+        estimators=[
+            ("rf", rf),
+            ("svm", svm),
+            ("xgb", xgb)
+        ],
         final_estimator=GradientBoostingClassifier(
             n_estimators=200,
             learning_rate=0.05,
@@ -103,30 +117,35 @@ def get_models_and_params():
     )
 
     # Soft Voting Ensemble
+    # Aggregates probabilistic predictions from base models
     soft_voting = VotingClassifier(
-        estimators=[("rf", rf), ("svm", svm)],
+        estimators=[
+            ("rf", rf),
+            ("svm", svm)
+        ],
         voting="soft",
         weights=[1, 1],
         n_jobs=-1
     )
 
-   
-    # Models 
-   
+    # ==========================================================
+    # MODEL REGISTRY
+    # ==========================================================
+
     models = {
         "Random Forest": rf,
         "SVM (RBF)": svm,
         "Logistic Regression": log_reg,
-        "kNN": knn,
-        "MLP (Neural Net)": mlp,
         "XGBoost": xgb,
         "LightGBM": lgbm,
         "Stacking Ensemble": stacking_model,
         "Soft Voting Ensemble": soft_voting
     }
 
-    # Parameter grids 
-  
+    # ==========================================================
+    # HYPERPARAMETER GRIDS
+    # ==========================================================
+
     params = {
 
         "Random Forest": {
@@ -145,18 +164,6 @@ def get_models_and_params():
 
         "Logistic Regression": {
             "clf__C": [0.01, 0.1, 1, 10, 100]
-        },
-
-        "kNN": {
-            "clf__n_neighbors": [3, 5, 7, 9],
-            "clf__weights": ["uniform", "distance"]
-        },
-
-        "MLP (Neural Net)": {
-            "clf__hidden_layer_sizes": [(64,), (128, 64), (128, 64, 32)],
-            "clf__activation": ["relu", "tanh"],
-            "clf__learning_rate_init": [0.0005, 0.001, 0.01],
-            "clf__alpha": [0.0001, 0.0005, 0.001]
         },
 
         "XGBoost": {
