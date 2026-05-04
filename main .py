@@ -11,9 +11,6 @@ This script implements the full end-to-end machine learning pipeline, including:
 - Inner cross-validation with hyperparameter tuning
 - Outer cross-validation for unbiased performance estimation
 - Automatic selection of best models per fold
-- Aggregation and analysis of top-performing models
-- Final evaluation on an independent hold-out dataset
-- Explainability analysis using SHAP
 
 Notes:
 - The hold-out set is strictly separated and used only for final evaluation
