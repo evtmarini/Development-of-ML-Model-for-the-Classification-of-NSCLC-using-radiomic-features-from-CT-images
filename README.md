@@ -1,12 +1,12 @@
 # Explainable Radiomics-Based Machine Learning Model for Lung Cancer Subtype Classification
 
-Development of an explainable ML pipeline for lung cancer subtype classification using radiomics features extracted from CT imaging.
+Development of an explainable machine learning pipeline for lung cancer subtype classification using radiomics features extracted from CT imaging.
 
 ---
 
 ## Overview
 
-This repository contains the full implementation of a machine learning pipeline for the classification of lung cancer subtypes (Adenocarcinoma , Squamous Cell Carcinoma) using radiomics features derived from CT images.
+This repository contains the full implementation of a machine learning pipeline for the classification of lung cancer subtypes (Adenocarcinoma, Squamous Cell Carcinoma) using radiomics features derived from CT images.
 
 The project was developed as part of a postgraduate thesis:
 
@@ -20,8 +20,8 @@ The pipeline integrates:
 - Training of ML models (LightGBM, XGBoost, Random Forest, Ensembles)  
 - Explainability using SHAP and LIME  
 
-Objective:  
-To develop a robust, generalizable, and interpretable machine learning model for lung cancer subtype classification.
+**Objective:**  
+To develop a robust, generalizable, and interpretable machine learning model for lung cancer subtype classification using radiomics features.
 
 ---
 
@@ -56,7 +56,7 @@ Radiomics provides a non-invasive approach by extracting quantitative features f
 | `src/models.py` | ML models and hyperparameters |
 | `src/evaluation.py` | Nested cross-validation and model evaluation |
 | `src/explainability.py` | SHAP + LIME explainability framework |
-| `scripts/main.py` | Full pipeline execution |
+| `scripts/main.py` | End-to-end pipeline execution |
 | `scripts/holdout_pipeline.py` | Final hold-out evaluation + explainability |
 | `scripts/shap_reporting.py` | SHAP reporting (outer + hold-out plots) |
 | `data/` | Input radiomics dataset |
@@ -64,12 +64,11 @@ Radiomics provides a non-invasive approach by extracting quantitative features f
 | `requirements.txt` | Project dependencies |
 | `README.md` | Project documentation |
 
-
 ---
 
 ## Pipeline
 
-The pipeline consists of the following stages:
+The pipeline follows a modular and reproducible workflow:
 
 1. Data Loading and Cleaning  
 2. Train/Test Splitting (center-aware)  
@@ -105,6 +104,8 @@ The pipeline consists of the following stages:
 - Hold-out dataset (10%)  
   - Final generalization evaluation  
 
+All experiments were performed using fixed random seeds (random_state = 42) to ensure reproducibility.
+
 ---
 
 ## Results
@@ -136,7 +137,7 @@ Lowest performance:
 - Stacking Ensemble + ReliefF (Top-k = 70)  
   → wF1 = 0.80 ± 0.02, AUC = 0.79  
 
-These results demonstrate stable generalization performance across models and feature subsets.
+These results demonstrate stable and robust generalization performance across models and feature subsets.
 
 ---
 
@@ -157,10 +158,12 @@ This indicates strong predictive performance on unseen data.
 
 ## Explainability
 
-Model interpretability was assessed using:
+Model interpretability was assessed using post-hoc explainability techniques:
 
 - SHAP (global feature importance)  
 - LIME (local explanations)  
+
+Explainability was performed on both outer cross-validation and independent hold-out datasets to ensure consistency.
 
 Key findings:
 
@@ -207,20 +210,7 @@ Note: Raw CT images are not included.
 ---
 
 ## How to Run
+
+```bash
 pip install -r requirements.txt
-
 python main.py
-
-
----
-
-## Author
-
-Evita Marini  
-MSc Bioinformatics and Neuroinformatics  
-
----
-
-## Citation
-
-If you use this work, please cite the corresponding publication (under submission).
