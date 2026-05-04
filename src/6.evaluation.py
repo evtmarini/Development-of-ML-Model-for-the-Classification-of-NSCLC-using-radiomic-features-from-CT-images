@@ -1,5 +1,17 @@
+"""
+Evaluation Module
 
-# evaluation.py
+Implements model training, hyperparameter tuning, and performance evaluation
+for radiomics-based classification tasks.
+
+Key components:
+- Class imbalance handling using ADASYN oversampling
+- Hyperparameter optimization using HalvingRandomSearchCV (successive halving)
+- Stratified cross-validation with adaptive split handling
+- Evaluation metrics: Accuracy, Precision, Recall, F1-score, AUC
+- Confusion matrix generation and visualization
+
+"""
 
 
 from sklearn.experimental import enable_halving_search_cv
@@ -52,7 +64,7 @@ def run_experiments(
         n_features = X_sel.shape[1]
         print(f"\n[INFO] Running Halving Search for feature set: {fs_name} ({n_features} features)")
 
-        # Αν cv είναι int, δημιουργούμε StratifiedKFold
+        
         if isinstance(cv, int):
             skf = StratifiedKFold(n_splits=cv, shuffle=True, random_state=random_state)
         else:
@@ -117,7 +129,7 @@ def run_experiments(
 
             except ValueError as e:
 
-                # fallback για προβλήματα με labels (XGBoost/LightGBM)
+              
                 if "Invalid classes inferred" in str(e):
                     print(f"Fixing label issue for {model_name}...")
 
