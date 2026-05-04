@@ -1,3 +1,27 @@
+"""
+Main Pipeline: Radiomics-Based ML for Lung Cancer Subtype Classification
+
+This script implements the full end-to-end machine learning pipeline, including:
+
+- Data loading and cleaning
+- Center-aware hold-out split (fixed, reproducible)
+- Balanced outer cross-validation (PredefinedSplit)
+- ComBat harmonization and feature preprocessing
+- Feature selection (LASSO, Boruta, mRMR, RFE-SVM, ReliefF, RF importance)
+- Inner cross-validation with hyperparameter tuning
+- Outer cross-validation for unbiased performance estimation
+- Automatic selection of best models per fold
+- Aggregation and analysis of top-performing models
+- Final evaluation on an independent hold-out dataset
+- Explainability analysis using SHAP
+
+Notes:
+- The hold-out set is strictly separated and used only for final evaluation
+- All preprocessing steps (ComBat, scaling, feature selection) are applied within each fold
+  to prevent data leakage
+- Results are saved incrementally for reproducibility and traceability
+"""
+
 import pandas as pd
 import numpy as np
 from pathlib import Path
