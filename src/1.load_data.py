@@ -1,5 +1,5 @@
 """
-NSCLC Radiomics Data Loading & Preprocessing
+NSCLC Radiomics Data Loading & Initial Preprocessing
 
 - Load dataset from Excel
 - Inspect label and center distributions
