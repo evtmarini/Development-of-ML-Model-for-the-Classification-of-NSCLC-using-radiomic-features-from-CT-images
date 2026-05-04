@@ -1,3 +1,18 @@
+"""
+NSCLC Radiomics Data Loading & Preprocessing
+
+- Load dataset from Excel
+- Inspect label and center distributions
+- Remove small classes
+- Encode labels
+- Handle missing values
+
+Returns:
+    X: feature matrix
+    y: encoded labels
+    center: center information
+"""
+
 import pandas as pd
 import numpy as np
 from sklearn.impute import SimpleImputer
@@ -13,7 +28,7 @@ def load_and_clean(path, id_col="case_id", target_col="label", center_col="cente
     os.makedirs(plot_dir, exist_ok=True)
 
    
-    # Load Excel dataset
+    # Load Dataset
   
     try:
         df = pd.read_excel(path, engine="openpyxl")
