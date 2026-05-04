@@ -1,3 +1,16 @@
+"""
+Stratified Cross-Validation Split & Fold Diagnostics
+
+- Generate stratified folds
+- Optimize fold balance across classes
+- Analyze center distribution 
+- Remove bias-related columns
+- Provide fold diagnostics and visualizations
+
+Returns:
+    best_splits, best_folds, best_report, X_clean
+"""
+
 import pandas as pd
 import numpy as np
 import seaborn as sns
@@ -14,7 +27,6 @@ def split_and_check(X, y, centers=None, n_splits=3, random_state=42, n_trials=20
     """
     Find the most balanced stratified folds and optionally balance across centers.
     Use 'center' info only for diagnostics (not in modeling), and remove any bias columns from X.
-    Returns: best_splits, best_folds, best_report, X_clean
     """
 
     os.makedirs(output_dir, exist_ok=True)
