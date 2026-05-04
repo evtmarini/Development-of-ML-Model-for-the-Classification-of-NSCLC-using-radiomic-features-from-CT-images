@@ -1,5 +1,13 @@
+"""
+Feature Preprocessing & Filtering Module
 
-# preprocessing.py — Feature filtering and transformation utils
+- Remove low-variance (uninformative) features
+- Remove highly correlated (redundant) features
+- Select features associated with target (statistical tests)
+- Normalize feature distributions (power transform)
+
+Designed for radiomics pipelines prior to feature selection and modeling.
+"""
 
 import pandas as pd
 import numpy as np
@@ -11,7 +19,7 @@ from sklearn.preprocessing import PowerTransformer
 # Variance filter — removes near-constant features
 def variance_filter(X, threshold=0.001):
     """
-    Removes features with variance below the given threshold.
+    Remove features with variance below threshold (uninformative features).
     Args:
         X (pd.DataFrame): Input features
         threshold (float): Variance threshold
@@ -27,9 +35,9 @@ def variance_filter(X, threshold=0.001):
 
 # Correlation filter — removes highly correlated features
 def correlation_filter(X, threshold=0.85):
-    """
-    Removes one feature from each highly correlated pair (> threshold).
-    Keeps the feature with the lower mean correlation to others.
+   """
+    Remove one feature from each highly correlated pair (> threshold),
+    keeping the feature with lower average correlation (less redundancy).
     Args:
         X (pd.DataFrame): Input features
         threshold (float): Correlation threshold
@@ -56,7 +64,9 @@ def correlation_filter(X, threshold=0.85):
 # Statistical filter — Kruskal-Wallis / Mann-Whitney test
 def stat_filter(X, y, alpha=0.1):
     """
-    Selects features significantly associated with target (Kruskal or Mann-Whitney).
+    Select features significantly associated with target using non-parametric tests.
+    - Mann–Whitney U for binary classification
+    - Kruskal–Wallis for multi-class
     Args:
         X (pd.DataFrame): Input features
         y (array-like): Class labels
@@ -82,7 +92,7 @@ def stat_filter(X, y, alpha=0.1):
 # Power transform (normalize skewed data)
 def power_transform(X):
     """
-    Applies Yeo–Johnson power transform to reduce skewness.
+    Apply Yeo–Johnson transform to reduce skewness and stabilize variance.
     """
     pt = PowerTransformer(method="yeo-johnson")
     X_transformed = pt.fit_transform(X)
