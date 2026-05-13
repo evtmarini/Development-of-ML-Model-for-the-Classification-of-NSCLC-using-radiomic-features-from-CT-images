@@ -43,7 +43,7 @@ def correlation_filter(X, threshold=0.85):
         threshold (float): Correlation threshold
     Returns:
         pd.DataFrame: Filtered feature set
-    """
+     """
     corr = X.corr().abs()
     upper = corr.where(np.triu(np.ones(corr.shape), k=1).astype(bool))
     to_drop = []
