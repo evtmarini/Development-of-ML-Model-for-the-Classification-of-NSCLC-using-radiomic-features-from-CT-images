@@ -210,6 +210,43 @@ Note: Raw CT images are not included.
 
 ---
 
+## Tested Environment
+
+* Python 3.8
+* Windows 11
+* Visual Studio Code
+
+
+## Installation
+
+Clone the repository:
+
+```bash
+git clone <repository_url>
+cd DEMO_RADIOMICS
+```
+
+Create a virtual environment:
+
+```bash
+python -m venv myvenv
+```
+
+Activate the environment (Windows):
+
+```bash
+.\myvenv\Scripts\activate
+```
+
+Install dependencies:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+
+
+
 ## How to Run
 
 ```bash
