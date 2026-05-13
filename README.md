@@ -222,10 +222,11 @@ Note: Raw CT images are not included.
 Clone the repository:
 
 ```bash
-git clone <repository_url>
-cd DEMO_RADIOMICS
-```
+git clone https://github.com/evtmarini/Development-of-ML-Model-for-the-Classification-of-NSCLC-using-radiomic-features-from-CT-images.git
+cd Development-of-ML-Model-for-the-Classification-of-NSCLC-using-radiomic-features-from-CT-images
 
+
+```
 Create a virtual environment:
 
 ```bash
@@ -241,7 +242,7 @@ Activate the environment (Windows):
 Install dependencies:
 
 ```bash
-python -m pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 
@@ -250,5 +251,4 @@ python -m pip install -r requirements.txt
 ## How to Run
 
 ```bash
-pip install -r requirements.txt
 python main.py
