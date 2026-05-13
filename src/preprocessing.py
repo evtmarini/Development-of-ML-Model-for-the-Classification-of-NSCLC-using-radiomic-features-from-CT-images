@@ -1,13 +1,3 @@
-"""
-Feature Preprocessing & Filtering Module
-
-- Remove low-variance (uninformative) features
-- Remove highly correlated (redundant) features
-- Select features associated with target (statistical tests)
-- Normalize feature distributions (power transform)
-
-Designed for radiomics pipelines prior to feature selection and modeling.
-"""
 
 import pandas as pd
 import numpy as np
@@ -35,15 +25,6 @@ def variance_filter(X, threshold=0.001):
 
 # Correlation filter — removes highly correlated features
 def correlation_filter(X, threshold=0.85):
-   """
-    Remove one feature from each highly correlated pair (> threshold),
-    keeping the feature with lower average correlation (less redundancy).
-    Args:
-        X (pd.DataFrame): Input features
-        threshold (float): Correlation threshold
-    Returns:
-        pd.DataFrame: Filtered feature set
-   """
     
     corr = X.corr().abs()
     upper = corr.where(np.triu(np.ones(corr.shape), k=1).astype(bool))
@@ -64,17 +45,7 @@ def correlation_filter(X, threshold=0.85):
 
 # Statistical filter — Kruskal-Wallis / Mann-Whitney test
 def stat_filter(X, y, alpha=0.1):
-    """
-    Select features significantly associated with target using non-parametric tests.
-    - Mann–Whitney U for binary classification
-    - Kruskal–Wallis for multi-class
-    Args:
-        X (pd.DataFrame): Input features
-        y (array-like): Class labels
-        alpha (float): Significance level
-    Returns:
-        pd.DataFrame: Statistically significant features
-    """
+
     classes = np.unique(y)
     selected = []
 
@@ -92,9 +63,7 @@ def stat_filter(X, y, alpha=0.1):
 
 # Power transform (normalize skewed data)
 def power_transform(X):
-    """
-    Apply Yeo–Johnson transform to reduce skewness and stabilize variance.
-    """
+   
     pt = PowerTransformer(method="yeo-johnson")
     X_transformed = pt.fit_transform(X)
     print("Applied power transform (Yeo–Johnson).")
