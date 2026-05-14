@@ -51,18 +51,18 @@ Radiomics provides a non-invasive approach by extracting quantitative features f
 
 | Component | Description |
 |:----------|:------------|
+| `main.py` | Main pipeline execution script |
 | `src/` | Core modules of the pipeline |
 | `src/load_data.py` | Data loading and preprocessing |
 | `src/split_and_check.py` | Center-aware splitting and validation |
+| `src/preprocessing.py` | Center-aware splitting and validation |
+| `src/evaluation.py` | Nested cross-validation framework |
 | `src/feature_selection.py` | Feature selection algorithms |
 | `src/models.py` | Machine learning models and hyperparameters |
-| `src/evaluation.py` | Nested cross-validation framework |
 | `src/explainability.py` | SHAP-based explainability module |
-| `scripts/main.py` | Main pipeline execution script |
-| `scripts/holdout_pipeline.py` | Final hold-out evaluation |
-| `scripts/shap_reporting.py` | SHAP visualization and reporting |
-| `data/` | Input radiomics dataset |
-| `results/` | Generated results and figures |
+| `scripts/hold_out.py` | Final hold-out evaluation |
+| `Data/` | Input radiomics dataset |
+| `Results/` | Generated results and figures |
 | `requirements.txt` | Python dependencies |
 | `README.md` | Project documentation |
 ---
