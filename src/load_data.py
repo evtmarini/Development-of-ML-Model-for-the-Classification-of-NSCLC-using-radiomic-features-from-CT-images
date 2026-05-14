@@ -22,7 +22,7 @@ import os
 
 
 def load_and_clean(path, id_col="case_id", target_col="label", center_col="center",
-                   min_class_size=10, plot_dir="plots/initial data"):
+                   min_class_size=100, plot_dir="plots/initial data"):
 
     # Create plot directory if not exists
     os.makedirs(plot_dir, exist_ok=True)
