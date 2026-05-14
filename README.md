@@ -162,7 +162,6 @@ This indicates strong predictive performance on unseen data.
 Model interpretability was assessed using post-hoc explainability techniques:
 
 - SHAP (global feature importance)  
-- LIME (local explanations)  
 
 Explainability was performed on both outer cross-validation and independent hold-out datasets to ensure consistency.
 
