@@ -50,9 +50,9 @@ label_names = {
 # PATHS
 # ============================
 
-leaderboard_csv = "results/average_leaderboard.csv"
-features_csv = "results/selected_features_new.csv"
-data_path = "data/Radiomic_Features_All.xlsx"
+leaderboard_csv = "Results/Outer_cv_results/average_leaderboard.csv"
+features_csv = "Results/Selected Features/selected_features_new.csv"
+data_path = "Data/Radiomic_Features_All.xlsx"
 holdout_idx_file = "results/holdout_indices.npy"
 
 output_dir = Path("results/shap_plots_final_new")
@@ -85,13 +85,7 @@ X, y, center = load_and_clean(data_path)
 
 df_features = pd.read_csv(features_csv)
 
-feats_row = df_features[
-    (df_features["FS_method"] == best_fs) &
-    (df_features["Classifier"] == best_clf) &
-    (df_features["Best_k"] == best_k)
-].iloc[0]
-
-features = feats_row["Selected_Features"].split(",")
+features = df_features["feature_name"].tolist()
 
 # ============================
 # LOAD MODELS
