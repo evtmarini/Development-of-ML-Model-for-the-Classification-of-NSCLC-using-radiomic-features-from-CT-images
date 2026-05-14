@@ -252,3 +252,24 @@ pip install -r requirements.txt
 
 ```bash
 python main.py
+
+```
+## Running Individual Modules
+
+Run full pipeline:
+
+```bash
+python main.py
+```
+
+Run hold-out evaluation only:
+
+```bash
+python -m src.hold_out
+```
+
+Run explainability analysis only:
+
+```bash
+python -m src.explainability
+```
