@@ -53,7 +53,7 @@ label_names = {
 leaderboard_csv = "Results/Outer_cv_results/average_leaderboard.csv"
 features_csv = "Results/Selected Features/selected_features_new.csv"
 data_path = "Data/Radiomic_Features_All.xlsx"
-holdout_idx_file = "results/holdout_indices.npy"
+holdout_idx_file = "Results/holdout_indices.npy"
 
 output_dir = Path("results/shap_plots_final_new")
 output_dir.mkdir(parents=True, exist_ok=True)
