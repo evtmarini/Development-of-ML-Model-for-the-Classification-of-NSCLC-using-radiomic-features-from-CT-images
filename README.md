@@ -1,48 +1,12 @@
 # Explainable Radiomics-Based Machine Learning Model for Lung Cancer Subtype Classification
 
-Development of an explainable machine learning pipeline for lung cancer subtype classification using radiomics features extracted from CT imaging.
-
 ---
 
 ## Overview
 
 This repository contains the full implementation of a machine learning pipeline for the classification of lung cancer subtypes (Adenocarcinoma, Squamous Cell Carcinoma) using radiomics features derived from CT images.
 
-The project was developed as part of a postgraduate thesis:
-
-“Explainable Radiomics-Based ML Model for Lung Cancer Subtype Classification”
-
-The pipeline integrates:
-
-- Data preprocessing and normalization  
-- ComBat harmonization for multi-center data  
-- Feature selection using multiple strategies  
-- Training of ML models (LightGBM, XGBoost, Random Forest, Ensembles)  
-- Explainability using SHAP and LIME  
-
-**Objective:**  
-To develop a robust, generalizable, and interpretable machine learning model for lung cancer subtype classification using radiomics features.
-
----
-
-## Background
-
-Lung cancer is the leading cause of cancer-related deaths worldwide (~19%).
-
-- NSCLC (~85%)
-  - Adenocarcinoma (ADC)  
-  - Squamous Cell Carcinoma (SCC)  
-  - Large Cell Carcinoma  
-
-- SCLC (~15%)
-  - More aggressive subtype  
-
-Accurate subtype classification is essential for:
-- Treatment planning  
-- Prognosis estimation  
-- Personalized medicine  
-
-Radiomics provides a non-invasive approach by extracting quantitative features from medical images.
+The project was developed as part of a postgraduate thesis.
 
 ---
 
@@ -75,37 +39,11 @@ The pipeline follows a modular and reproducible workflow:
 2. Train/Test Splitting (center-aware)  
 3. ComBat Harmonization  
 4. Preprocessing and Normalization  
-5. Feature Selection  
-   - LASSO  
-   - Boruta  
-   - mRMR  
-   - RFE-SVM  
-   - ReliefF  
+5. Feature Selection 
 6. Model Training  
-   - LightGBM  
-   - XGBoost  
-   - Random Forest  
-   - SVM  
-   - Ensemble methods  
-7. Evaluation  
-   - Nested Cross-Validation  
-   - Hold-out testing  
+7. Evaluation (Cross-Validation, Hold-out testing)
 8. Explainability  
-   - SHAP  
-   - LIME  
 
----
-
-## Evaluation Strategy
-
-- Nested Cross-Validation  
-  - Inner CV for hyperparameter tuning and feature selection  
-  - Outer CV for unbiased performance estimation  
-
-- Hold-out dataset (10%)  
-  - Final generalization evaluation  
-
-All experiments were performed using fixed random seeds (random_state = 42) to ensure reproducibility.
 
 ---
 
@@ -157,58 +95,6 @@ This indicates strong predictive performance on unseen data.
 
 ---
 
-## Explainability
-
-Model interpretability was assessed using post-hoc explainability techniques:
-
-- SHAP (global feature importance)  
-
-Explainability was performed on both outer cross-validation and independent hold-out datasets to ensure consistency.
-
-Key findings:
-
-- Dominance of wavelet-transformed texture features  
-- Important feature families:
-  - GLCM  
-  - GLRLM  
-  - GLSZM  
-  - GLDM  
-
-Class-specific patterns:
-- ADC: entropy and low-dependence features  
-- SCC: variance and dependence-related features  
-
-Feature importance patterns were consistent across validation and hold-out sets.
-
----
-
-## Feature Analysis
-
-Analysis of the optimal feature subset (Top-k = 50):
-
-- Dominance of higher-order radiomic features  
-- Main image domains:
-  - Wavelet-transformed images  
-  - Laplacian of Gaussian (LoG)  
-
-Feature distribution:
-- Texture features (GLCM, GLRLM) dominate  
-- GLDM and GLSZM follow  
-- First-order features are limited  
-
-This highlights the importance of multi-scale texture heterogeneity.
-
----
-
-## Data
-
-- Radiomics features extracted using PyRadiomics  
-- Labeled dataset for subtype classification  
-
-Note: Raw CT images are not included.
-
----
-
 ## Tested Environment
 
 * Python 3.8
@@ -247,13 +133,11 @@ pip install -r requirements.txt
 
 
 
-## How to Run
+## Usage
 
-```bash
-python main.py
+
 
 ```
-## Running Individual Modules
 
 Run full pipeline:
 
