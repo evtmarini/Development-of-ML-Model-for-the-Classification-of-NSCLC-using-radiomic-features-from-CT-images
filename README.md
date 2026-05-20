@@ -124,12 +124,12 @@ pip install -r requirements.txt
 
 
 
-```
+
 
 Run full pipeline:
 
 
-```
+
 
 ```bash
 
