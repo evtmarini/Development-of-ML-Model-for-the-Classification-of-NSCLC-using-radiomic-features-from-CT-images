@@ -49,20 +49,7 @@ The pipeline follows a modular and reproducible workflow:
 
 ## Results
 
-### Inner Cross-Validation
-
 Top-performing configurations:
-
-- Soft Voting + ReliefF (Top-k = 90) → wF1 = 0.83 ± 0.02  
-- XGBoost + RFE-SVM (Top-k = 90) → wF1 = 0.83 ± 0.01  
-- Soft Voting + RF importance (Top-k = 90) → wF1 = 0.83 ± 0.01  
-
-Performance differences were minimal, indicating robust and consistent model behavior.
-
-Lowest performance:
-- Logistic Regression + mRMR (Top-k = 10)  
-  → wF1 = 0.48 ± 0.02, AUC = 0.56  
-
 ---
 
 ### Outer Cross-Validation
@@ -141,7 +128,11 @@ pip install -r requirements.txt
 
 Run full pipeline:
 
+
+```
+
 ```bash
+
 python main.py
 ```
 
