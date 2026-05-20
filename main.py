@@ -54,7 +54,7 @@ from neurocombat_sklearn import CombatModel
 # ============================================================
 # LOG SETUP
 # ============================================================
-Path("results").mkdir(parents=True, exist_ok=True)
+Path("Results").mkdir(parents=True, exist_ok=True)
 logging.basicConfig(
     filename="results/main_run.log",
     filemode="a",
@@ -73,7 +73,7 @@ logger.info("Loading dataset...")
 # ============================================================
 # 1. LOAD DATA
 # ============================================================
-base = Path("data")
+base = Path("Data")
 path = base / "Radiomic_Features_All.xlsx"
 
 try:
@@ -109,7 +109,7 @@ train_indices = np.setdiff1d(np.arange(len(y)), holdout_indices)
 # ============================================================
 # SAVE FIXED HOLD-OUT INDICES (for reproducibility & XAI)
 # ============================================================
-holdout_indices_path = Path("results/holdout_indices.npy")
+holdout_indices_path = Path("Results/holdout_indices.npy")
 np.save(holdout_indices_path, holdout_indices)
 
 logger.info(f"Fixed hold-out indices saved to {holdout_indices_path}")
@@ -145,7 +145,7 @@ try:
         n_splits=3,
         random_state=42,
         n_trials=20,
-        output_dir="data/split_and_check/split_report"
+        output_dir="Data/split_and_check/split_report"
     )
     print("Best seed:", split_report["best_seed"])
     print("mean_label_std:", split_report["mean_label_std"])
@@ -175,9 +175,9 @@ center_codes = pd.factorize(center_main)[0].reshape(-1, 1)
 # ============================================================
 print("\nStarting Outer Cross-Validation Loop:\n")
 
-inner_file = "results/inner_cv_results_new.csv"
-outer_file = "results/outer_cv_results_new.csv"
-features_file = "results/selected_features_new.csv"
+inner_file = "Results/inner_cv_results_new.csv"
+outer_file = "Results/outer_cv_results_new.csv"
+features_file = "Results/selected_features_new.csv"
 
 stepwise_range = range(10, 101, 20)
 
