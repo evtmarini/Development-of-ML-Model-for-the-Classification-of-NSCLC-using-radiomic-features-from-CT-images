@@ -140,17 +140,17 @@ Run full pipeline:
 
 ```bash
 
-python -m main.py
+python main.py
 ```
 
 Run hold-out evaluation only:
 
 ```bash
-python -m src.hold_out
+python src/hold_out.py
 ```
 
 Run explainability analysis only:
 
 ```bash
-python -m src.explainability
+python src/explainability.py
 ```
