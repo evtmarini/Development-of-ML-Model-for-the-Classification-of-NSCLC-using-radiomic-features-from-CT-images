@@ -111,6 +111,13 @@ Activate the environment (Windows):
 .\myvenv\Scripts\activate
 ```
 
+Activate the environment (Linux):
+
+```bash
+source ./myvenv/bin/activate
+```
+
+
 Install dependencies:
 
 ```bash
@@ -133,7 +140,7 @@ Run full pipeline:
 
 ```bash
 
-python main.py
+python -m main.py
 ```
 
 Run hold-out evaluation only:
