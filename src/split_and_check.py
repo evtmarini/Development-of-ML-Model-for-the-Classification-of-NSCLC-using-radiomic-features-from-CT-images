@@ -23,7 +23,7 @@ warnings.filterwarnings("ignore", category=FutureWarning, module="seaborn")
 import os
 
 
-def split_and_check(X, y, centers=None, n_splits=3, random_state=42, n_trials=20, output_dir="data/split_and_check/split_report"):
+def split_and_check(X, y, centers=None, n_splits=3, random_state=42, n_trials=20, output_dir="Data/split_and_check/split_report"):
     """
     Find the most balanced stratified folds and optionally balance across centers.
     Use 'center' info only for diagnostics (not in modeling), and remove any bias columns from X.
