@@ -29,8 +29,8 @@ from sklearn.metrics import (
 
 from neurocombat_sklearn import CombatModel
 
-from src.load_data import load_and_clean
-from src.models import get_models_and_params
+from load_data import load_and_clean
+from models import get_models_and_params
 
 # ============================================================
 # LOGGING
