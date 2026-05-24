@@ -29,9 +29,9 @@ import shap
 import matplotlib.pyplot as plt
 
 # Project modules
-from src.load_data import load_and_clean
-from src.split_and_check import split_and_check
-from src.models import get_models_and_params
+from load_data import load_and_clean
+from split_and_check import split_and_check
+from models import get_models_and_params
 
 from sklearn.model_selection import PredefinedSplit
 from sklearn.preprocessing import StandardScaler
