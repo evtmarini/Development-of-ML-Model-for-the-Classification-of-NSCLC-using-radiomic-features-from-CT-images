@@ -83,6 +83,50 @@ X, y, center = load_and_clean(data_path)
 # LOAD GLOBAL FEATURES
 # ============================
 
+# ------------------------------------------------------------
+# OPTIONAL TRANSITION LOGIC
+#
+# Older versions of the pipeline used a manually exported
+# ranked-feature CSV with schema:
+#
+# feature_rank | feature_name
+#
+# generated from the experiment-tracking file:
+#
+# Results/Selected Features/Selected Features.csv
+#
+# using:
+#
+# best_row = (
+#     pd.read_csv(leaderboard_csv)
+#     .sort_values("F1_mean", ascending=False)
+#     .iloc[0]
+# )
+#
+# df_features = pd.read_csv(features_csv)
+#
+# feats_row = df_features[
+#     (df_features["FS_method"] == best_row["FS_method"]) &
+#     (df_features["Classifier"] == best_row["Classifier"]) &
+#     (df_features["Best_k"] == best_row["Top_k"])
+# ].iloc[0]
+#
+# features = [
+#     f.strip()
+#     for f in feats_row["Selected_Features"].split(",")
+#     if f.strip()
+# ]
+#
+# This isolated the feature subset corresponding
+# to the best-performing model and exported it
+# into a ranked-feature CSV for SHAP analysis.
+#
+# Current implementation directly loads the
+# final ranked-feature CSV generated from
+# the best-performing model configuration.
+#
+# ------------------------------------------------------------
+
 df_features = pd.read_csv(features_csv)
 
 features = df_features["feature_name"].tolist()
@@ -98,7 +142,6 @@ models, _ = get_models_and_params()
 # ============================================================
 
 print("\n========== OUTER SHAP ==========")
-
 
 _, best_folds, _, X_clean = split_and_check(
     X=X,
@@ -133,15 +176,21 @@ model_outer = models[best_clf]
 model_outer.fit(X_train_sel, y_train_outer)
 
 explainer = shap.Explainer(model_outer, X_train_sel)
-shap_values = explainer(X_test_sel, check_additivity=False)
+
+shap_values = explainer(
+    X_test_sel,
+    check_additivity=False
+)
 
 outer_dir = output_dir / "outer"
 outer_dir.mkdir(exist_ok=True)
 
 for c in range(shap_values.values.shape[2]):
+
     shap_class = shap_values.values[:, :, c]
 
     plt.figure()
+
     shap.summary_plot(
         shap_class,
         X_test_sel,
@@ -149,7 +198,7 @@ for c in range(shap_values.values.shape[2]):
         max_display=20,
         show=False
     )
-    
+
     ax = plt.gca()
     ax.set_xlim(-0.15, 0.15)
 
@@ -160,6 +209,7 @@ for c in range(shap_values.values.shape[2]):
         dpi=300,
         bbox_inches="tight"
     )
+
     plt.close()
 
 # ============================================================
@@ -169,6 +219,7 @@ for c in range(shap_values.values.shape[2]):
 print("\n========== HOLD-OUT SHAP ==========")
 
 holdout_idx = np.load(holdout_idx_file)
+
 train_idx = np.setdiff1d(np.arange(len(X)), holdout_idx)
 
 X_train_full = X.iloc[train_idx]
@@ -179,35 +230,65 @@ X_holdout = X.iloc[holdout_idx]
 y_holdout = y[holdout_idx]
 center_holdout = center.iloc[holdout_idx]
 
+# ============================
 # COMBAT + SCALING
+# ============================
+
 center_codes_train = pd.factorize(center_train)[0].reshape(-1, 1)
 center_codes_holdout = pd.factorize(center_holdout)[0].reshape(-1, 1)
 
 combat = CombatModel()
+
 X_train_h = combat.fit_transform(X_train_full, center_codes_train)
 X_holdout_h = combat.transform(X_holdout, center_codes_holdout)
 
 scaler = StandardScaler()
 
-X_train_s = pd.DataFrame(scaler.fit_transform(X_train_h), columns=X.columns)
-X_holdout_s = pd.DataFrame(scaler.transform(X_holdout_h), columns=X.columns)
+X_train_s = pd.DataFrame(
+    scaler.fit_transform(X_train_h),
+    columns=X.columns
+)
+
+X_holdout_s = pd.DataFrame(
+    scaler.transform(X_holdout_h),
+    columns=X.columns
+)
+
+# ============================
+# APPLY FEATURE SUBSET
+# ============================
 
 X_train_sel = X_train_s[features]
 X_holdout_sel = X_holdout_s[features]
 
+# ============================
+# FINAL MODEL
+# ============================
+
 model_final = models[best_clf]
+
 model_final.fit(X_train_sel, y_train_full)
 
 explainer = shap.Explainer(model_final, X_train_sel)
-shap_values = explainer(X_holdout_sel, check_additivity=False)
+
+shap_values = explainer(
+    X_holdout_sel,
+    check_additivity=False
+)
+
+# ============================
+# SAVE HOLDOUT SHAP
+# ============================
 
 holdout_dir = output_dir / "holdout"
 holdout_dir.mkdir(exist_ok=True)
 
 for c in range(shap_values.values.shape[2]):
+
     shap_class = shap_values.values[:, :, c]
 
     plt.figure()
+
     shap.summary_plot(
         shap_class,
         X_holdout_sel,
@@ -218,7 +299,7 @@ for c in range(shap_values.values.shape[2]):
 
     ax = plt.gca()
     ax.set_xlim(-0.15, 0.15)
-    
+
     plt.title(f"HOLD-OUT SHAP - {label_names[c]}")
 
     plt.savefig(
@@ -226,30 +307,47 @@ for c in range(shap_values.values.shape[2]):
         dpi=300,
         bbox_inches="tight"
     )
+
     plt.close()
 
-print("\n SHAP completed (outer + holdout).")
+print("\nSHAP completed (outer + holdout).")
 
 # ============================================================
-# FEATURE CSV 
+# FEATURE CSV
 # ============================================================
 
 def extract_image_type(f):
+
     if "wavelet" in f:
         return f.split("_")[0]
+
     elif "original" in f:
         return "original"
+
     return "other"
 
+
 def extract_feature_class(f):
-    for cls in ["glcm", "glrlm", "glszm", "gldm", "firstorder", "shape"]:
+
+    for cls in [
+        "glcm",
+        "glrlm",
+        "glszm",
+        "gldm",
+        "firstorder",
+        "shape"
+    ]:
+
         if cls in f.lower():
             return cls.upper()
+
     return "OTHER"
+
 
 records = []
 
 for f in features:
+
     records.append({
         "dataset": "outer",
         "model": best_clf,
@@ -259,17 +357,19 @@ for f in features:
     })
 
 for f in features:
+
     records.append({
         "dataset": "holdout",
         "model": best_clf,
         "feature_name": f,
-        "image_type": extract_image_type(f),
+        "image_type": extract_feature_class(f),
         "feature_class": extract_feature_class(f)
     })
 
 df_export = pd.DataFrame(records)
 
 csv_path = output_dir / "feature_summary.csv"
+
 df_export.to_csv(csv_path, index=False)
 
-print(f"\n Feature CSV saved at: {csv_path}")
+print(f"\nFeature CSV saved at: {csv_path}")
