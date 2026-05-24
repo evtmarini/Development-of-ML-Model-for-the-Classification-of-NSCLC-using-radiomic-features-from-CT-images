@@ -28,10 +28,10 @@ import seaborn as sns
 import logging
 
 # Project modules
-from src.load_data import load_and_clean
-from src.split_and_check import split_and_check
-from src.preprocessing import variance_filter, correlation_filter, stat_filter
-from src.feature_selection import (
+from load_data import load_and_clean
+from split_and_check import split_and_check
+from preprocessing import variance_filter, correlation_filter, stat_filter
+from feature_selection import (
     fs_lasso,
     fs_rf_importance,
     fs_boruta,
@@ -39,8 +39,8 @@ from src.feature_selection import (
     fs_mrmr,
     fs_relieff
 )
-from src.models import get_models_and_params
-from src.evaluation import run_experiments
+from models import get_models_and_params
+from evaluation import run_experiments
 # from src.explainability import run_explainability
 
 # sklearn
