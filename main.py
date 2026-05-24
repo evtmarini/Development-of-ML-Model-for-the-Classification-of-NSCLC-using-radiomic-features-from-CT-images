@@ -177,7 +177,7 @@ print("\nStarting Outer Cross-Validation Loop:\n")
 
 inner_file = "Results/Inner_cv_results/Inner_cv_results.csv"
 outer_file = "Results/Outer_cv_results/Outer_cv_results.csv"
-features_file = "Results/selected_features.csv"
+features_file = "Results/Selected Features/Selected Features.csv"
 
 stepwise_range = range(10, 101, 20)
 
