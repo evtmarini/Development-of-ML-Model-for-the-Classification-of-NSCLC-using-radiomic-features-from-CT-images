@@ -57,7 +57,10 @@ FEATURES_FILE = RESULTS_DIR / "Selected Features" / "selected_features_new.csv"
 
 HOLDOUT_INDICES_FILE = RESULTS_DIR / "holdout_indices.npy"
 
-OUTPUT_CSV = RESULTS_DIR / "holdout_results.csv"
+HOLDOUT_RESULTS_DIR = RESULTS_DIR / "Holdout_results"
+HOLDOUT_RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+
+OUTPUT_CSV = HOLDOUT_RESULTS_DIR / "Holdout_results.xlsx"
 
 # ============================================================
 # 1. LOAD DATA
@@ -261,7 +264,7 @@ results = pd.DataFrame([
     }
 ])
 
-results.to_csv(OUTPUT_CSV, index=False)
+results.to_excel(OUTPUT_CSV, index=False)
 
 logger.info(f"Hold-out results saved to: {OUTPUT_CSV}")
 
