@@ -48,7 +48,7 @@ def run_experiments(
         cv = StratifiedKFold(n_splits=3, shuffle=True, random_state=random_state)
 
     results = []
-    os.makedirs("data/confusion_matrices", exist_ok=True)
+    os.makedirs("Data/confusion_matrices", exist_ok=True)
 
     if scoring is None:
         scoring = make_scorer(f1_score, average="weighted")
@@ -184,7 +184,7 @@ def run_experiments(
             print(f"CV Metrics → Acc={acc:.4f}, Prec={prec:.4f}, Rec={rec:.4f}, F1={f1:.4f}, AUC={auc:.4f}")
 
             # Save Confusion Matrix
-            cm_path = f"data/confusion_matrices/cm_{fs_name}_{model_name}.png"
+            cm_path = f"Data/confusion_matrices/cm_{fs_name}_{model_name}.png"
             disp = ConfusionMatrixDisplay(confusion_matrix=cm)
             disp.plot(cmap="Blues")
             plt.title(f"Confusion Matrix — {fs_name} | {model_name}")
@@ -210,7 +210,7 @@ def run_experiments(
     # Save results (append if CSV exists)
 
     results_df = pd.DataFrame(results)
-    csv_path = "data/halving_results.csv"
+    csv_path = "Data/halving_results.csv"
 
     if os.path.exists(csv_path):
         old_df = pd.read_csv(csv_path)
@@ -229,7 +229,7 @@ def run_experiments(
     plt.xlabel("Weighted F1-score")
     plt.title("Halving Random Search — Cross-Fold Results")
     plt.tight_layout()
-    plt.savefig("data/halving_results.png", dpi=300)
+    plt.savefig("Data/halving_results.png", dpi=300)
     plt.close()
 
     print(f"Results saved to {csv_path}")
