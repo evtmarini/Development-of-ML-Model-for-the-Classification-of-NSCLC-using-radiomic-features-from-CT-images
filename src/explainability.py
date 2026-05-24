@@ -55,7 +55,7 @@ features_csv = "Results/Selected Features/selected_features_new.csv"
 data_path = "Data/Radiomic_Features_All.xlsx"
 holdout_idx_file = "Results/holdout_indices.npy"
 
-output_dir = Path("results/shap_plots_final_new")
+output_dir = Path("Results/shap_plots_final_new")
 output_dir.mkdir(parents=True, exist_ok=True)
 
 # ============================
@@ -107,7 +107,7 @@ _, best_folds, _, X_clean = split_and_check(
     n_splits=3,
     random_state=42,
     n_trials=20,
-    output_dir="data/split_and_check/split_report"
+    output_dir="Data/split_and_check/split_report"
 )
 
 outer_cv = PredefinedSplit(test_fold=best_folds - 1)
