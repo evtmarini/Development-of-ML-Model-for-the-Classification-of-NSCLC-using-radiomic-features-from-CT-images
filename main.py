@@ -56,7 +56,7 @@ from neurocombat_sklearn import CombatModel
 # ============================================================
 Path("Results").mkdir(parents=True, exist_ok=True)
 logging.basicConfig(
-    filename="results/main_run.log",
+    filename="Results/main_run.log",
     filemode="a",
     format="%(asctime)s - %(levelname)s - %(message)s",
     level=logging.INFO
@@ -175,9 +175,9 @@ center_codes = pd.factorize(center_main)[0].reshape(-1, 1)
 # ============================================================
 print("\nStarting Outer Cross-Validation Loop:\n")
 
-inner_file = "Results/inner_cv_results_new.csv"
-outer_file = "Results/outer_cv_results_new.csv"
-features_file = "Results/selected_features_new.csv"
+inner_file = "Results/Inner_cv_results/Inner_cv_results.csv"
+outer_file = "Results/Outer_cv_results/Outer_cv_results.csv"
+features_file = "Results/Selected Features/selected_features_new.csv"
 
 stepwise_range = range(10, 101, 20)
 
