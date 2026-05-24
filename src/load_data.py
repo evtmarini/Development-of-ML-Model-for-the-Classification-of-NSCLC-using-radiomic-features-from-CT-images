@@ -27,7 +27,7 @@ def load_and_clean(
     target_col="label",
     center_col="center",
     min_class_size=100,
-    plot_dir="plots/initial data"
+    plot_dir="Results/plots/initial_data"
 ):
 
     # ============================================================
